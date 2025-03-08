@@ -1,4 +1,5 @@
-﻿using HumanResourcesSystemCore.Models;
+﻿using HumanResourcesSystemCore.Dtos;
+using HumanResourcesSystemCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,8 @@ namespace HumanResourcesSystemCore.Services
     public interface IUserService
     {
         Task<User>? FindAsync(string id);
-        Task AddAsync(User user);
-        Task Update(User user);
+        Task AddAsync(UserDto userDto);
+        Task Update(UserDto userDto);
         Task Remove(string id);
     }
 }

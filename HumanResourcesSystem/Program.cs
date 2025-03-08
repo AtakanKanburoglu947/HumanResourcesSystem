@@ -2,6 +2,7 @@ using HumanResourcesSystemCore.Repositories;
 using HumanResourcesSystemCore.Services;
 using HumanResourcesSystemRepository;
 using HumanResourcesSystemRepository.Repositories;
+using HumanResourcesSystemService;
 using HumanResourcesSystemService.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
 });
-
+builder.Services.AddAutoMapper(typeof(DtoMapper).Assembly);
 builder.Services.AddScoped<ITokenRepository,TokenRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository,RefreshTokenRepository>();
 builder.Services.AddScoped<ICookieRepository,CookieRepository>();

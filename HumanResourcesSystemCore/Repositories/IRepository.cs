@@ -8,10 +8,9 @@ namespace HumanResourcesSystemCore.Repositories
 {
     public interface IRepository<T> where T : class
     {
-        Task<T> Find(string id);
-        Task<T> FindByName(string name);
-        Task Add(T entity);
-        void Remove(T entity);
+        Task<T> FindAsync(string id);
+        Task AddAsync(T entity);
+        void Remove(string id);
         void Update(T entity);
     }
 }

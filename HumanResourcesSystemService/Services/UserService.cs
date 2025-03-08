@@ -1,4 +1,6 @@
-﻿using HumanResourcesSystemCore;
+﻿using AutoMapper;
+using HumanResourcesSystemCore;
+using HumanResourcesSystemCore.Dtos;
 using HumanResourcesSystemCore.Models;
 using HumanResourcesSystemCore.Repositories;
 using HumanResourcesSystemCore.Services;
@@ -14,15 +16,17 @@ namespace HumanResourcesSystemService.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task AddAsync(User user)
+        public async Task AddAsync(UserDto userDto)
         {
-            await _userRepository.AddAsync(user);
+            await _userRepository.AddAsync(_mapper.Map<User>(userDto));
             await _unitOfWork.CommitAsync();
         }
 
@@ -37,9 +41,10 @@ namespace HumanResourcesSystemService.Services
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task Update(User user)
+        public async Task Update(UserDto userDto)
         {
-            _userRepository.Update(user);
+
+            _userRepository.Update(_mapper.Map<User>(userDto));
             await _unitOfWork.CommitAsync();
         }
     }
