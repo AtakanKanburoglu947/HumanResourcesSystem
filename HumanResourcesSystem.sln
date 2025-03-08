@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanResourcesSystem", "HumanResourcesSystem\HumanResourcesSystem.csproj", "{964252B6-7584-4AFA-A7AB-E51EF387FD9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanResourcesSystem", "HumanResourcesSystem\HumanResourcesSystem.csproj", "{964252B6-7584-4AFA-A7AB-E51EF387FD9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanResourcesSystemCore", "HumanResourcesSystemCore\HumanResourcesSystemCore.csproj", "{1198B4AE-1AC6-4F84-9EE7-A253EA1FC8FD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumanResourcesSystemRepository", "HumanResourcesSystemRepository\HumanResourcesSystemRepository.csproj", "{A8F4BE63-676D-45A5-B5F7-E06F773113D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanResourcesSystemService", "HumanResourcesSystemService\HumanResourcesSystemService.csproj", "{BAEA439E-7B9D-4892-9956-234B9FDA7C3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{964252B6-7584-4AFA-A7AB-E51EF387FD9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{964252B6-7584-4AFA-A7AB-E51EF387FD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{964252B6-7584-4AFA-A7AB-E51EF387FD9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1198B4AE-1AC6-4F84-9EE7-A253EA1FC8FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1198B4AE-1AC6-4F84-9EE7-A253EA1FC8FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1198B4AE-1AC6-4F84-9EE7-A253EA1FC8FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1198B4AE-1AC6-4F84-9EE7-A253EA1FC8FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8F4BE63-676D-45A5-B5F7-E06F773113D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8F4BE63-676D-45A5-B5F7-E06F773113D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8F4BE63-676D-45A5-B5F7-E06F773113D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8F4BE63-676D-45A5-B5F7-E06F773113D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAEA439E-7B9D-4892-9956-234B9FDA7C3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAEA439E-7B9D-4892-9956-234B9FDA7C3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAEA439E-7B9D-4892-9956-234B9FDA7C3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAEA439E-7B9D-4892-9956-234B9FDA7C3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
