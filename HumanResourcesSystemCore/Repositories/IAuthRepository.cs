@@ -1,4 +1,6 @@
-﻿using HumanResourcesSystemCore.AuthModels;
+﻿using HumanResourcesSystemCore.AuthDtos;
+using HumanResourcesSystemCore.AuthModels;
+using HumanResourcesSystemCore.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +15,9 @@ namespace HumanResourcesSystemCore.Repositories
         Task Login(Login login);
         void Logout();
         Task ChangePassword(string newPassword, string email);
+        Task<AuthDto> RefreshToken(string refreshToken);
+        bool ValidateToken(string token);
+        void RemoveExpiredRefreshTokens(string userId);
+        AccountDto GetAccountDetailsFromToken();
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,15 +32,28 @@ namespace HumanResourcesSystemRepository.Repositories
             }
             throw new Exception("Bulunamadı");
         }
-        public async void Remove(string id)
+        public async Task Remove(string id)
         {
-            var entity = await FindAsync(id);
-            _dbSet.Remove(entity);
+            var entity = await _dbSet.FindAsync(id);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+            }
         }
 
         public void Update(T entity)
         {
             _dbSet.Update(entity);
+        }
+
+        public List<T> Where(Expression<Func<T, DateTime>> orderBy, Expression<Func<T, bool>> expression)
+        {
+            List<T> result = _dbSet.OrderByDescending(orderBy).Where(expression).ToList();
+            if (result != null)
+            {
+                return result;
+            }
+            return null;
         }
     }
 }

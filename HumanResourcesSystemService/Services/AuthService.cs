@@ -1,5 +1,7 @@
 ﻿using HumanResourcesSystemCore;
+using HumanResourcesSystemCore.AuthDtos;
 using HumanResourcesSystemCore.AuthModels;
+using HumanResourcesSystemCore.Dtos;
 using HumanResourcesSystemCore.Repositories;
 using HumanResourcesSystemCore.Services;
 using System;
@@ -25,6 +27,11 @@ namespace HumanResourcesSystemService.Services
             await _unitOfWork.CommitAsync();
         }
 
+        public AccountDto GetAccountDetailsFromToken()
+        {
+            return _authRepository.GetAccountDetailsFromToken();
+        }
+
         public async Task Login(Login login)
         {
             await _authRepository.Login(login);
@@ -35,10 +42,26 @@ namespace HumanResourcesSystemService.Services
             _authRepository.Logout();
         }
 
+        public async Task<AuthDto> RefreshToken(string refreshToken)
+        {
+          return await _authRepository.RefreshToken(refreshToken);
+        }
+
         public async Task Register(Register register)
         {
             await _authRepository.Register(register);
             await _unitOfWork.CommitAsync();
+        }
+
+        public async Task RemoveExpiredRefreshTokens(string userId)
+        {
+            _authRepository.RemoveExpiredRefreshTokens(userId);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public bool ValidateToken(string token)
+        {
+            return _authRepository.ValidateToken(token);
         }
     }
 }

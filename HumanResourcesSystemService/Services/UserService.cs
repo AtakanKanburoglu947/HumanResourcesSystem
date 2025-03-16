@@ -40,7 +40,6 @@ namespace HumanResourcesSystemService.Services
             _userRepository.Remove(id);
             await _unitOfWork.CommitAsync();
         }
-
         public async Task Update(UserDto userDto)
         {
 

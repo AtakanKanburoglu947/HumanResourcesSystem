@@ -1,0 +1,12 @@
+﻿@*
+*@
+@{
+}
+@model HumanResourcesSystemCore.Models.User
+<form method="post">
+    <button type="submit" asp-action="Logout" asp-controller="Account">Logout</button>
+</form>
+@Model.FirstName
+@Model.LastName
+@Model.Email
+@Model.Department.Name

@@ -14,5 +14,6 @@ namespace HumanResourcesSystemCore.Services
         Task AddAsync(UserDto userDto);
         Task Update(UserDto userDto);
         Task Remove(string id);
+
     }
 }

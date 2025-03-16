@@ -6,6 +6,7 @@ using HumanResourcesSystemRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,7 +36,7 @@ namespace HumanResourcesSystemService.Services
         }
         public async Task RemoveAsync(string id)
         {
-            _repository.Remove(id);
+            await _repository.Remove(id);
             await _unitOfWork.CommitAsync();
         }
 
@@ -43,6 +44,11 @@ namespace HumanResourcesSystemService.Services
         {
             _repository.Update(_mapper.Map<T>(dto));
             await _unitOfWork.CommitAsync();
+        }
+
+        public List<T> Where(Expression<Func<T, DateTime>> orderBy, Expression<Func<T, bool>> expression)
+        {
+            return _repository.Where(orderBy, expression);
         }
     }
 }

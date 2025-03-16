@@ -1,0 +1,124 @@
+﻿@{
+    ViewData["Title"] = "Takvim";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@model List<HumanResourcesSystem.Models.CelendarEvent>
+
+<head>
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
+
+    <!-- jQuery (FullCalendar için gerekli) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+</head>
+
+<!-- Kullanıcı ID'sini hidden input ile alıyoruz -->
+<input type="hidden" id="userId" value="@ViewData["UserId"]" />
+
+<h2>İş Takvimi</h2>
+
+<!-- Takvim için bir div oluştur -->
+<div id="calendar"></div>
+
+<!-- Etkinlik ekleme formu -->
+<div id="eventModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Etkinlik Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="eventForm">
+                    <div class="form-group">
+                        <label for="eventTitle">Etkinlik Başlığı</label>
+                        <input type="text" id="eventTitle" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="eventStart">Başlangıç Tarihi</label>
+                        <input type="datetime-local" id="eventStart" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="eventEnd">Bitiş Tarihi</label>
+                        <input type="datetime-local" id="eventEnd" class="form-control" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // FullCalendar'ı başlatıyoruz
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            editable: true,
+            selectable: true,
+            events: @Html.Raw(Json.Serialize(Model)),  // Modeldeki etkinlikleri FullCalendar'a aktarıyoruz
+
+            eventTimeFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                meridiem: 'short'
+            },
+            eventClick: function (info) {
+                // Etkinliğe tıklandığında yapılacak işlem (örneğin formu açma)
+                alert('Etkinlik: ' + info.event.title);
+            },
+            dateClick: function (info) {
+                // Takvimde bir tarihe tıklanınca formu açma
+                $('#eventStart').val(info.dateStr);  // Tıklanan tarihi başlangıç olarak ayarla
+                $('#eventEnd').val(info.dateStr);    // Aynı şekilde bitişi de ayarla
+                $('#eventModal').modal('show');      // Modal'ı göster
+            }
+        });
+
+        calendar.render();
+
+        // Etkinlik ekleme formu
+        $('#eventForm').submit(function (e) {
+            e.preventDefault();
+
+            var title = $('#eventTitle').val();
+            var start = $('#eventStart').val();
+            var end = $('#eventEnd').val();
+            var userId = $('#userId').val();  // Hidden input'tan kullanıcı ID'sini alıyoruz
+
+            // Etkinlik nesnesini oluşturuyoruz
+            var newEvent = {
+                title: title,
+                start: start,
+                end: end,
+                userId: userId  // Kullanıcı ID'sini ekliyoruz
+            };
+
+            // Etkinliği FullCalendar'a ekliyoruz
+            calendar.addEvent(newEvent);
+
+            // Etkinlik verilerini backend'e gönderiyoruz
+            $.ajax({
+                url: '@Url.Action("AddEvent", "Event")',
+                method: 'POST',
+                data: JSON.stringify(newEvent),
+                contentType: 'application/json',
+                success: function (response) {
+                    // Etkinlik başarıyla eklendiyse modalı kapat
+                    $('#eventModal').modal('hide');
+                },
+                error: function () {
+                    alert("Etkinlik eklenirken bir hata oluştu.");
+                }
+            });
+        });
+    });
+</script>

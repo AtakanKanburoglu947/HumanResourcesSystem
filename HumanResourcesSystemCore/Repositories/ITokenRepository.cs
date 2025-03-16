@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HumanResourcesSystemCore.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -11,5 +12,6 @@ namespace HumanResourcesSystemCore.Repositories
     {
         string Generate(IEnumerable<Claim> claims);
         bool Validate(string token);
+        AccountDto Decode();
     }
 }
