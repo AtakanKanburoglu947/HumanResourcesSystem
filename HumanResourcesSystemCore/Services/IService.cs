@@ -11,8 +11,9 @@ namespace HumanResourcesSystemCore.Services
     {
         Task<T> FindAsync(string id);
         Task AddAsync(Dto dto);
-        Task UpdateAsync(Dto dto);
+        Task UpdateAsync(T entity);
         Task RemoveAsync(string id);
         List<T> Where(Expression<Func<T, DateTime>> orderBy, Expression<Func<T, bool>> expression);
+        List<T> GetAll();
     }
 }

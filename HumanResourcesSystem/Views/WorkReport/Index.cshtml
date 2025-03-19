@@ -1,0 +1,40 @@
+﻿@model HumanResourcesSystem.Models.WorkReportPageModel
+
+@{
+    ViewData["Title"] = "Work Reports";
+}
+<h2>Work Reports</h2>
+
+<!-- Work Report Ekleme Kısmı -->
+<div class="card p-4 mb-4">
+    <h4>Add Work Report</h4>
+    <form method="post" asp-controller="WorkReport" asp-action="Create">
+        <div class="form-group">
+            <label for="Title">Title</label>
+            <input type="text" class="form-control" id="Title" name="Title" required />
+        </div>
+        <div class="form-group">
+            <label for="Description">Description</label>
+            <textarea class="form-control" id="Description" name="Description" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Add Work Report</button>
+    </form>
+</div>
+
+<!-- Work Report Listesi -->
+<h3 class="mt-4">Work Report List</h3>
+<div class="list-group">
+    @foreach (var report in Model.WorkReports)
+    {
+        <div class="list-group-item" style="word-wrap: break-word; overflow-wrap: break-word; white-space: pre-line;">
+            <div class="d-flex justify-content-between">
+                <h5>@report.Title</h5>
+                <small>@report.ReportDate.ToString("yyyy-MM-dd")</small>
+            </div>
+            <p class="mt-2" style="word-wrap: break-word; overflow-wrap: break-word; white-space: pre-line; max-width: 100%;">
+                @report.Description
+            </p>
+            <hr />
+        </div>
+    }
+</div>

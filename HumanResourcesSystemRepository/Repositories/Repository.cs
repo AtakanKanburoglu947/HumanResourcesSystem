@@ -32,6 +32,12 @@ namespace HumanResourcesSystemRepository.Repositories
             }
             throw new Exception("Bulunamadı");
         }
+
+        public List<T> GetAll()
+        {
+            return _dbSet.ToList();
+        }
+
         public async Task Remove(string id)
         {
             var entity = await _dbSet.FindAsync(id);

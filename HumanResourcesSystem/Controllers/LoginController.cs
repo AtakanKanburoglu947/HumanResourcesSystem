@@ -26,7 +26,7 @@ namespace HumanResourcesSystem.Controllers
             try
             {
                 await _authService.Login(login);
-                return Redirect("/login");
+                return Redirect("/");
             }
             catch (Exception exception)
             {

@@ -14,5 +14,6 @@ namespace HumanResourcesSystemCore.Repositories
         List<T> Where(Expression<Func<T, DateTime>> orderBy, Expression<Func<T, bool>> expression);
         Task Remove(string id);
         void Update(T entity);
+        List<T> GetAll();
     }
 }

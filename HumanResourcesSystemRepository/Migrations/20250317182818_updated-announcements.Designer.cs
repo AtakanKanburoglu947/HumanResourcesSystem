@@ -4,6 +4,7 @@ using HumanResourcesSystemRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HumanResourcesSystemRepository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250317182818_updated-announcements")]
+    partial class updatedannouncements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,6 +256,37 @@ namespace HumanResourcesSystemRepository.Migrations
                     b.ToTable("PerformanceReviews");
                 });
 
+            modelBuilder.Entity("HumanResourcesSystemCore.Models.TrainingRecord", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CertificateUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CompletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CourseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TrainingRecords");
+                });
+
             modelBuilder.Entity("HumanResourcesSystemCore.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -363,10 +397,6 @@ namespace HumanResourcesSystemRepository.Migrations
                     b.Property<DateTime>("ReportDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ReviewerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -376,8 +406,6 @@ namespace HumanResourcesSystemRepository.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ReviewerId");
 
                     b.HasIndex("UserId");
 
@@ -598,6 +626,17 @@ namespace HumanResourcesSystemRepository.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("HumanResourcesSystemCore.Models.TrainingRecord", b =>
+                {
+                    b.HasOne("HumanResourcesSystemCore.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HumanResourcesSystemCore.Models.User", b =>
                 {
                     b.HasOne("HumanResourcesSystemCore.Models.Company", "Company")
@@ -623,19 +662,11 @@ namespace HumanResourcesSystemRepository.Migrations
 
             modelBuilder.Entity("HumanResourcesSystemCore.Models.WorkReport", b =>
                 {
-                    b.HasOne("HumanResourcesSystemCore.Models.User", "Reviewer")
-                        .WithMany()
-                        .HasForeignKey("ReviewerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("HumanResourcesSystemCore.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Reviewer");
 
                     b.Navigation("User");
                 });

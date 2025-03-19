@@ -34,15 +34,21 @@ namespace HumanResourcesSystemService.Services
         {
             return await _repository.FindAsync(id);
         }
+
+        public List<T> GetAll()
+        {
+            return _repository.GetAll();
+        }
+
         public async Task RemoveAsync(string id)
         {
             await _repository.Remove(id);
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task UpdateAsync(Dto dto)
+        public async Task UpdateAsync(T entity)
         {
-            _repository.Update(_mapper.Map<T>(dto));
+            _repository.Update(entity);
             await _unitOfWork.CommitAsync();
         }
 

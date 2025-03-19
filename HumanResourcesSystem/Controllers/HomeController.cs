@@ -1,4 +1,6 @@
 using HumanResourcesSystem.Models;
+using HumanResourcesSystemCore.Dtos;
+using HumanResourcesSystemCore.Models;
 using HumanResourcesSystemCore.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +11,29 @@ namespace HumanResourcesSystem.Controllers
     [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication")]
     public class HomeController : Controller
     {
-
-     
-
-        public IActionResult Index()
+        private readonly IAuthService _authService;
+        private readonly IService<Announcement, AnnouncementDto> _announcementService;
+        private readonly IService<EventModel, EventDto> _eventService;
+        private readonly IUserService _userService;
+        public HomeController(IAuthService authService, IService<EventModel, EventDto> eventService, 
+            IService<Announcement,AnnouncementDto> announcementService, IUserService userService )
         {
-            return View();
+            _authService = authService;
+            _eventService = eventService;
+            _announcementService = announcementService;
+            _userService = userService;
+        }
+        public async Task<IActionResult> Index()
+        {
+            AccountDto accountDto = _authService.GetAccountDetailsFromToken();
+            List<EventModel> events = _eventService
+                .Where(x => x.StartDate, x => x.UserId == accountDto.Id)
+                .Where(x => x.EndDate.Date == DateTime.Now.Date)
+                .ToList();
+            List<Announcement> announcements = _announcementService.GetAll();
+            var user = await _userService.FindAsync(accountDto.Id);
+            HomePageModel homePageModel = new HomePageModel() { Announcements = announcements, Events = events, User = user };
+            return View(homePageModel);
         }
 
         public IActionResult Privacy()

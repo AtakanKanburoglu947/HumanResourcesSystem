@@ -11,5 +11,7 @@ namespace HumanResourcesSystemCore.Dtos
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime ReportDate { get; set; } = DateTime.UtcNow;
+        public string UserId { get; set; }
+        public string ReviewerId { get; set; }
     }
 }
