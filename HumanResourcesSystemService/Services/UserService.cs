@@ -7,6 +7,7 @@ using HumanResourcesSystemCore.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +34,11 @@ namespace HumanResourcesSystemService.Services
         public async Task<User>? FindAsync(string id)
         {
             return await _userRepository.FindAsync(id);
+        }
+
+        public async Task<User>? FirstOrDefault(Expression<Func<User, bool>> expression)
+        {
+            return await _userRepository.FirstOrDefault(expression);
         }
 
         public async Task Remove(string id)

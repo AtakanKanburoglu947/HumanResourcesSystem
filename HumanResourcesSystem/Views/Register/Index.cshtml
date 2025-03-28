@@ -2,8 +2,56 @@
     Layout = null;
 }
 @model HumanResourcesSystemCore.AuthModels.Register
-<div class="container">
-    <main role="main" class="pb-3">
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kayıt Ol</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HumanResourcesSystem.styles.css" asp-append-version="true" />
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .register-container {
+            background-color: #ffffff; /* Beyaz kutu */
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(200, 200, 200, 0.5); /* Hafif beyazımsı kenar */
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+    
+
+        .form-group {
+            text-align: left;
+        }
+
+        .login-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="@Url.Action("Index", "Auth")" class="login-link btn btn-success">Giriş Yap</a>
+
+    <div class="card register-container">
+        <h3 class="text-center">İnsan Kaynakları Sistemi</h3>
         <form asp-action="Index" method="post">
             <div class="form-group">
                 <label asp-for="FirstName"></label>
@@ -15,33 +63,34 @@
             </div>
             <div class="form-group">
                 <label asp-for="BirthDate"></label>
-                <input asp-for="BirthDate" class="form-control", type="datetime-local" />
+                <input asp-for="BirthDate" type="datetime-local" class="form-control" />
             </div>
-
             <div class="form-group">
                 <label asp-for="Email"></label>
                 <input asp-for="Email" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" , type="password" />
+                <input asp-for="Password" type="password" class="form-control" />
             </div>
             <br />
-            <button type="submit" class="btn btn-primary" style="width:100%">Kayıt ol</button>
+            <button type="submit" class="btn btn-success" style="width:100%">Kayıt Ol</button>
         </form>
+
         @if (ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
         {
-            <div class="alert alert-danger">
+            <div class="alert alert-danger mt-3">
                 @foreach (var error in ViewData.ModelState["register"].Errors)
                 {
                     <p class="alert">@error.ErrorMessage</p>
                 }
             </div>
         }
-    </main>
+    </div>
 
-</div>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
+</body>
+</html>

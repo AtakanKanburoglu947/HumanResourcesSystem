@@ -13,8 +13,8 @@ namespace HumanResourcesSystemCore.Dtos
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Reason { get; set; }
+        public bool? IsAccepted { get; set; } = null;
         public string UserId { get; set; }
-        public User User { get; set; }
         public string? ManagerId { get; set; }
     }
 }

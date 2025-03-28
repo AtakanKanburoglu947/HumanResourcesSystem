@@ -1,4 +1,5 @@
-﻿using HumanResourcesSystemCore.Repositories;
+﻿using HumanResourcesSystemCore.Models;
+using HumanResourcesSystemCore.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,17 @@ namespace HumanResourcesSystemRepository.Repositories
             {
                 return entity;
             }
-            throw new Exception("Bulunamadı");
+            return null;
+        }
+
+        public async Task<T>? FirstOrDefault(Expression<Func<T, bool>> expression)
+        {
+            T? entity = await _dbSet.FirstOrDefaultAsync(expression);
+            if (entity != null)
+            {
+                return entity;
+            }
+            return null!;
         }
 
         public List<T> GetAll()

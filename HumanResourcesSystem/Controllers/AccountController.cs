@@ -22,8 +22,12 @@ namespace HumanResourcesSystem.Controllers
         {
             AccountDto accountDto = _authService.GetAccountDetailsFromToken();
             User user = await _userService.FindAsync(accountDto.Id);
-            Department department = await _service.FindAsync(user.DepartmentId);
+            Department? department = await _service.FindAsync(user.DepartmentId);
+            if (department != null)
+            {
             user.Department = department;
+                
+            }
             return View(user);
         }
         [HttpPost]

@@ -1,0 +1,79 @@
+﻿@model HumanResourcesSystem.Models.LeaveRequestPageModel
+
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card p-4 shadow-sm">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="StartDate" class="form-label">Başlangıç Tarihi</label>
+                        <input type="date" class="form-control" id="StartDate" name="StartDate" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="EndDate" class="form-label">Bitiş Tarihi</label>
+                        <input type="date" class="form-control" id="EndDate" name="EndDate" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Reason" class="form-label">Sebep</label>
+                        <textarea class="form-control" id="Reason" name="Reason" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success" asp-controller="LeaveRequest" asp-action="Add">İzin İste</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <div class="card p-4 shadow-sm">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Başlama Tarihi</th>
+                            <th>Bitiş Tarihi</th>
+                            <th>Sebep</th>
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.LeaveRequests != null && Model.LeaveRequests.Any())
+                        {
+                            @foreach (var request in Model.LeaveRequests)
+                            {
+                                <tr>
+                                    <td>@request.StartDate.ToShortDateString()</td>
+                                    <td>@request.EndDate.ToShortDateString()</td>
+                                    <td>@request.Reason</td>
+                                    <td>
+                                        @if (request.IsAccepted == null)
+                                        {
+                                            <span>Bekleniyor</span>
+                                        }
+                                        else if (request.IsAccepted == true)
+                                        {
+                                            <span class="text-success">Kabul edildi</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">Reddedildi</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center">Çalışma izni isteği bulunamadı.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

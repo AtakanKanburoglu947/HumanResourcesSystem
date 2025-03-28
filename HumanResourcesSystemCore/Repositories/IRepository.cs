@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HumanResourcesSystemCore.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,5 +16,7 @@ namespace HumanResourcesSystemCore.Repositories
         Task Remove(string id);
         void Update(T entity);
         List<T> GetAll();
+        Task<T>? FirstOrDefault(Expression<Func<T, bool>> expression);
+
     }
 }

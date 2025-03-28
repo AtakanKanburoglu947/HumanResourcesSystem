@@ -35,6 +35,11 @@ namespace HumanResourcesSystemService.Services
             return await _repository.FindAsync(id);
         }
 
+        public async Task<T>? FirstOrDefault(Expression<Func<T, bool>> expression)
+        {
+            return await _repository.FirstOrDefault(expression);
+        }
+
         public List<T> GetAll()
         {
             return _repository.GetAll();

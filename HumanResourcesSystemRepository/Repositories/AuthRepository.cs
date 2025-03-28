@@ -137,7 +137,11 @@ namespace HumanResourcesSystemRepository.Repositories
                 UserName = $"{register.FirstName}{register.LastName}"
             };
             var result = await _userManager.CreateAsync(user,register.Password);
-            if (!result.Succeeded)
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user,"User");
+            }
+            else
             {
                 throw new Exception("User registration failed.");
             }

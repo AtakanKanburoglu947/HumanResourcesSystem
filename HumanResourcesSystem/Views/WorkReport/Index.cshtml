@@ -1,28 +1,24 @@
 ﻿@model HumanResourcesSystem.Models.WorkReportPageModel
 
 @{
-    ViewData["Title"] = "Work Reports";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
-<h2>Work Reports</h2>
 
-<!-- Work Report Ekleme Kısmı -->
 <div class="card p-4 mb-4">
-    <h4>Add Work Report</h4>
     <form method="post" asp-controller="WorkReport" asp-action="Create">
         <div class="form-group">
-            <label for="Title">Title</label>
+            <label for="Title">Başlık</label>
             <input type="text" class="form-control" id="Title" name="Title" required />
         </div>
         <div class="form-group">
-            <label for="Description">Description</label>
+            <label for="Description">Açıklama</label>
             <textarea class="form-control" id="Description" name="Description" rows="4" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Add Work Report</button>
+        <br />
+        <button type="submit" class="btn btn-success">Çalışma Raporu Ekle</button>
     </form>
 </div>
 
-<!-- Work Report Listesi -->
-<h3 class="mt-4">Work Report List</h3>
 <div class="list-group">
     @foreach (var report in Model.WorkReports)
     {

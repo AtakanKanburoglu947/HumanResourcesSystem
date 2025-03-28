@@ -1,8 +1,10 @@
 ﻿using HumanResourcesSystemCore.Models;
 using HumanResourcesSystemCore.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,6 +27,16 @@ namespace HumanResourcesSystemRepository.Repositories
         public async Task<User> FindAsync(string id)
         {
             User? user = await _appDbContext.Users.FindAsync(id);
+            if (user != null)
+            {
+                return user;
+            }
+            return null!;
+        }
+
+        public async Task<User>? FirstOrDefault(Expression<Func<User, bool>> expression)
+        {
+            User? user = await _appDbContext.Users.FirstOrDefaultAsync(expression);
             if (user != null)
             {
                 return user;

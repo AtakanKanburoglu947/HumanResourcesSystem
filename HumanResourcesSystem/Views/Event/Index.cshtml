@@ -1,5 +1,7 @@
 ﻿@model List<HumanResourcesSystem.Models.CelendarEvent>
-
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -12,7 +14,7 @@
 <body>
 
     <div class="container mt-4">
-        <h2 class="text-center">📅 İş Takvimi Yönetimi</h2>
+        <h2 class="text-center">Etkinlikler</h2>
 
         @if (!ViewData.ModelState.IsValid)
         {
@@ -26,10 +28,8 @@
             </div>
         }
 
-        <!-- 🟢 Yeni Etkinlik Ekleme Butonu -->
-        <button class="btn btn-success mb-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#addEventModal">Yeni Etkinlik Ekle</button>
+        <button class="btn btn-success mb-3 " data-bs-toggle="modal" data-bs-target="#addEventModal">Yeni Etkinlik Ekle</button>
 
-        <!-- 🟣 Etkinlik Grid -->
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             @foreach (var eventItem in Model)
             {
@@ -44,10 +44,8 @@
                             </p>
                         </div>
                         <div class="card-footer text-center">
-                            <!-- Silme Butonu (Kırmızı) -->
-                            <button class="btn btn-danger mb-3 rounded-pill deleteBtn" data-id="@eventItem.Id">Sil</button>
-                            <!-- Düzenleme Butonu (Yuvarlak köşe) -->
-                            <button class="btn btn-warning mb-3 rounded-pill editBtn"
+                            <button class="btn btn-danger mb-3 deleteBtn" data-id="@eventItem.Id">Sil</button>
+                            <button class="btn btn-success mb-3 editBtn"
                                     data-id="@eventItem.Id"
                                     data-title="@eventItem.Title"
                                     data-start="@eventItem.Start.ToString("yyyy-MM-ddTHH:mm")"

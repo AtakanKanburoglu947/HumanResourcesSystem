@@ -14,6 +14,7 @@ namespace HumanResourcesSystemCore.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Reason { get; set; }
+        public bool? IsAccepted { get; set; } = null;
         [ForeignKey("User")]
 
         public string UserId { get; set; }
