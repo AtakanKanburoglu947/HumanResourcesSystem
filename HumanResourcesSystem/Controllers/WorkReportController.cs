@@ -19,30 +19,59 @@ namespace HumanResourcesSystem.Controllers
             _workReportService = workReportService;
             _userService = userService;
         }
-        public IActionResult Index()
+        [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication", Policy = "UserOnly")]
+        public IActionResult Index(int id)
         {
-            AccountDto accountDto = _authService.GetAccountDetailsFromToken();
-            var workReports = _workReportService.Where(x => x.ReportDate, x=>x.UserId == accountDto.Id);
-            WorkReportPageModel workReportPageModel = new WorkReportPageModel()
+            ViewData["id"] = id;
+            if (id > 0)
             {
-                WorkReports = workReports,
+                id *= 5;
+            }
+            AccountDto accountDto = _authService.GetAccountDetailsFromToken();
+            var workReports = _workReportService.Pagination(id, x=>x.UserId == accountDto.Id);
+            WorkReportPageModel workReportPageModel = new WorkReportPageModel();
+            PaginationModel<WorkReport, WorkReportPageModel> paginationModel = new PaginationModel<WorkReport, WorkReportPageModel>()
+            {
+                Data = workReportPageModel,
+                Dataset = workReports,
+                PartialPaginationModel = new PartialPaginationModel() { Count = _workReportService.Where(x=>x.UserId == accountDto.Id).Count},
             };
-            return View(workReportPageModel);
+            return View(paginationModel);
         }
+        [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication", Policy = "UserOnly")]
         [HttpPost]
-        public async Task<IActionResult> Add(WorkReportPageModel workReportPageModel)
+        public async Task<IActionResult> Add(PaginationModel<WorkReport, WorkReportPageModel> paginationModel)
         {
             AccountDto accountDto = _authService.GetAccountDetailsFromToken();
             User user = await _userService.FindAsync(accountDto.Id);
             WorkReportDto workReportDto = new WorkReportDto() {
-                Description = workReportPageModel.Description,
+                Description = paginationModel.Data.Description,
                 ReportDate = DateTime.Now,
-                Title = workReportPageModel.Title,
+                Title = paginationModel.Data.Title,
                 UserId = accountDto.Id,
                 ReviewerId = user.ManagerId
             };
             await _workReportService.AddAsync(workReportDto);
             return RedirectToAction("Index");
+        }
+        [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication", Policy = "ManagerOnly")]
+        public IActionResult Reports(int id)
+        {
+            ViewData["id"] = id;
+            if (id > 0)
+            {
+                id *= 5;
+            }
+            AccountDto accountDto = _authService.GetAccountDetailsFromToken();
+            var workReports = _workReportService.Pagination(id, x => x.ReviewerId == accountDto.Id);
+            WorkReportPageModel workReportPageModel = new WorkReportPageModel();
+            PaginationModel<WorkReport, WorkReportPageModel> paginationModel = new PaginationModel<WorkReport, WorkReportPageModel>()
+            {
+                Data = workReportPageModel,
+                Dataset = workReports,
+                PartialPaginationModel = new PartialPaginationModel() { Count = _workReportService.Where(x => x.UserId == accountDto.Id).Count },
+            };
+            return View(paginationModel);
         }
     }
 }

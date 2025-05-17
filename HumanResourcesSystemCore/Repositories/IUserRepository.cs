@@ -12,9 +12,11 @@ namespace HumanResourcesSystemCore.Repositories
     {
         Task<User>? FindAsync(string id);
         Task AddAsync(User user);
-        void Update(User user);
-        void Remove(string id);
+        Task Update(User user);
+        Task Remove(string id);
         Task<User>? FirstOrDefault(Expression<Func<User, bool>> expression);
-
+        List<User> Where(Expression<Func<User, bool>> expression);
+        List<User> Pagination(int startIndex, Expression<Func<User, bool>> whereExpression);
+        List<User> GetAll();
     }
 }

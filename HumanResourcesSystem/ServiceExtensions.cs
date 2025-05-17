@@ -9,6 +9,7 @@ using HumanResourcesSystemService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HumanResourcesSystem
 {
@@ -39,6 +40,17 @@ namespace HumanResourcesSystem
             services.AddScoped<ILoggerService, LoggerService>();
             services.AddAuthentication("CustomSchemeAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, CustomAuthenticationHandler>("CustomSchemeAuthentication", options => { });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ManagerOnly", policy =>
+                    policy.Requirements.Add(new RoleRequirement("manager")));
+                options.AddPolicy("AdminOnly", policy =>
+                    policy.Requirements.Add(new RoleRequirement("ADMIN")));
+                options.AddPolicy("UserOnly", policy =>
+                    policy.Requirements.Add(new RoleRequirement("USER")));
+            });
+
+            services.AddScoped<IAuthorizationHandler, RoleAuthorizationHandler>();
             services.AddHttpContextAccessor();
             services.ConfigureApplicationCookie(options =>
             {

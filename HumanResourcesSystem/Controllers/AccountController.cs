@@ -1,4 +1,5 @@
-﻿using HumanResourcesSystemCore.Dtos;
+﻿using HumanResourcesSystem.Models;
+using HumanResourcesSystemCore.Dtos;
 using HumanResourcesSystemCore.Models;
 using HumanResourcesSystemCore.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -23,12 +24,19 @@ namespace HumanResourcesSystem.Controllers
             AccountDto accountDto = _authService.GetAccountDetailsFromToken();
             User user = await _userService.FindAsync(accountDto.Id);
             Department? department = await _service.FindAsync(user.DepartmentId);
+            AccountPageModel accountPageModel = new AccountPageModel()
+            {
+                Email = accountDto.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                IsManager = await _authService.HasRole("manager", user)
+            };
             if (department != null)
             {
-            user.Department = department;
+            accountPageModel.Department = department;
                 
             }
-            return View(user);
+            return View(accountPageModel);
         }
         [HttpPost]
         public IActionResult Logout()

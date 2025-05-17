@@ -18,12 +18,12 @@ namespace HumanResourcesSystemRepository
         public DbSet<Department> Departments { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
         public DbSet<PerformanceReview> PerformanceReviews { get; set;}
-        public DbSet<JobApplication> JobApplications { get; set; }
         public DbSet<WorkReport> WorkReports { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<DatabaseLog> DatabaseLogs { get; set; }
         public DbSet<EventModel> EventModels { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
+        public DbSet<DailyTask> DailyTasks { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -65,25 +65,17 @@ namespace HumanResourcesSystemRepository
                 .HasForeignKey(p => p.ReviewerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<JobApplication>()
-                .HasOne(j => j.Reviewer)
-                .WithMany()
-                .HasForeignKey(j => j.ReviewerId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<WorkReport>()
-    .HasOne(j => j.Reviewer)
-    .WithMany()
-    .HasForeignKey(j => j.ReviewerId)
-    .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<User>()
-    .HasOne(u => u.Department)
-    .WithMany(d => d.Users)
-    .HasForeignKey(u => u.DepartmentId)
-    .OnDelete(DeleteBehavior.Restrict);
+                    builder.Entity<WorkReport>()
+            .HasOne(j => j.Reviewer)
+            .WithMany()
+            .HasForeignKey(j => j.ReviewerId)
+            .OnDelete(DeleteBehavior.Restrict);
+                    builder.Entity<User>()
+            .HasOne(u => u.Department)
+            .WithMany(d => d.Users)
+            .HasForeignKey(u => u.DepartmentId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<User>()
-                .Property(u => u.Salary)
-                .HasPrecision(18, 2);
 
         }
     }

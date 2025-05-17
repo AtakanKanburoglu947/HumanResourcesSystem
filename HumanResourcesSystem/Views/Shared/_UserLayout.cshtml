@@ -7,16 +7,7 @@
     <title>İnsan Kaynakları Sistemi</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <style>
-        .message {
-            text-align: center;
-            background-color: red;
-            color: white;
-            width: 20px;
-            height: 20%;
-            border-radius: 25%
-        }
-    </style>
+
 </head>
 <body>
     <header>
@@ -37,7 +28,12 @@
                             </a>
 
                         </li>
-              
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index","Dailytask")" class="nav-link text-dark">
+                                Yapılıcaklar Listesi
+                            </a>
+
+                        </li>
                         <li class="nav-item">
                             <a href="@Url.Action("Index","PerformanceReview")" class="nav-link text-dark">Performans Değerlendirmeleri</a>
                         </li>

@@ -1,5 +1,66 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model PaginationModel<HumanResourcesSystemCore.Models.LeaveRequest, NoData>
+
 @{
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
 }
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="card p-4 shadow-sm">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Başlama Tarihi</th>
+                        <th>Bitiş Tarihi</th>
+                        <th>Sebep</th>
+                        <th>Durum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Dataset != null && Model.Dataset.Any())
+                    {
+                        @foreach (var request in Model.Dataset)
+                        {
+                            <tr>
+                                <td>@request.StartDate.ToShortDateString()</td>
+                                <td>@request.EndDate.ToShortDateString()</td>
+                                <td>@request.Reason</td>
+                                <td>
+                                    @if (request.IsAccepted == null)
+                                    {
+                                        <span>Bekleniyor</span>
+                                    }
+                                    else if (request.IsAccepted == true)
+                                    {
+                                        <span class="text-success">Kabul edildi</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">Reddedildi</span>
+                                    }
+                                </td>
+                                @if (request.IsAccepted == null)
+                                {
+                                    <td>
+                                        <a class="btn btn-success" asp-area="" asp-controller="LeaveRequest" asp-action="Accept"
+                                           asp-route-id="@request.Id">Kabul Et</a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-danger" asp-area="" asp-controller="LeaveRequest" asp-action="Reject"
+                                         asp-route-id ="@request.Id">Reddet</a>
+                                    </td>
+                                }
+                             
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center">Çalışma izni isteği bulunamadı.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

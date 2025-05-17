@@ -1,0 +1,56 @@
+﻿@model PaginationModel<HumanResourcesSystemCore.Models.DailyTask, DailyTaskPageModel>
+@{
+    if ((bool)ViewData["HasRole"] == true)
+    {
+        Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_UserLayout.cshtml";
+
+    }
+}
+
+<div class="task-container">
+    <div class="card p-4 shadow-sm" style="width: 100%; background: #fff; border-radius: 10px;">
+        <form method="post" asp-controller="DailyTask" asp-action="Add">
+            <div class="task-input">
+                <input type="text" asp-for="Data.Name" placeholder="Görev İsmi" class="form-control" required />
+                <textarea asp-for="Data.Description" placeholder="Açıklama" class="form-control mt-2" required></textarea>
+                <button type="submit" class="btn btn-success mt-2">Görevi Kaydet</button>
+            </div>
+        </form>
+    </div>
+</div>
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Görev İsmi</th>
+            <th>Açıklama</th>
+            <th>Durum</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.Dataset)
+        {
+            <tr>
+                <td>@task.Name</td>
+                <td>@task.Description</td>
+                <td>@(task.isFinished == true ? "Tamamlandı" : "Bekliyor")</td>
+                <td>
+                    @if (task.isFinished == false)
+                    {
+                        <form method="post" asp-controller="DailyTask" asp-action="MarkAsFinished">
+                            <input type="hidden" name="taskId" value="@task.Id" />
+                            <button type="submit" class="btn btn-success">✅</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@await Html.PartialAsync("Partial/Pagination", Model.PartialPaginationModel)
+

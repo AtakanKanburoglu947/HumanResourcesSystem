@@ -2,6 +2,7 @@
 using HumanResourcesSystemCore.AuthDtos;
 using HumanResourcesSystemCore.AuthModels;
 using HumanResourcesSystemCore.Dtos;
+using HumanResourcesSystemCore.Models;
 using HumanResourcesSystemCore.Repositories;
 using HumanResourcesSystemCore.Services;
 using System;
@@ -21,15 +22,20 @@ namespace HumanResourcesSystemService.Services
             _authRepository = authRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task ChangePassword(string newPassword, string email)
+        public async Task ChangePassword(string newPassword, string userId)
         {
-            await _authRepository.ChangePassword(newPassword, email);
+            await _authRepository.ChangePassword(newPassword, userId);
             await _unitOfWork.CommitAsync();
         }
 
         public AccountDto GetAccountDetailsFromToken()
         {
             return _authRepository.GetAccountDetailsFromToken();
+        }
+
+        public async Task<IQueryable<User>> UsersWithRole(string roleName)
+        {
+            return await _authRepository.UsersWithRole(roleName);
         }
 
         public async Task Login(Login login)
@@ -62,6 +68,11 @@ namespace HumanResourcesSystemService.Services
         public bool ValidateToken(string token)
         {
             return _authRepository.ValidateToken(token);
+        }
+
+        public Task<bool> HasRole(string roleName, User user)
+        {
+            return _authRepository.HasRole(roleName, user); 
         }
     }
 }

@@ -40,9 +40,10 @@ namespace HumanResourcesSystem.Controllers
             var manager = await _userService.FirstOrDefault(x => x.ManagerId == user.ManagerId);
             var company = await _companyService.FindAsync(user.CompanyId);
             var department = await _departmentService.FindAsync(user.DepartmentId)!;
+            bool isUserManager = await _authService.HasRole("manager", user);
             
             HomePageModel homePageModel = new HomePageModel() { Announcements = announcements, Events = events, User = user
-            , DepartmentName = department?.Name, CompanyName = company?.Name, ManagerName = manager?.UserName};
+            , DepartmentName = department?.Name, CompanyName = company?.Name, ManagerName = manager?.UserName, IsUserManager = isUserManager};
             return View(homePageModel);
         }
 

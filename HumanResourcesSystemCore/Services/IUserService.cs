@@ -13,9 +13,11 @@ namespace HumanResourcesSystemCore.Services
     {
         Task<User>? FindAsync(string id);
         Task AddAsync(UserDto userDto);
-        Task Update(UserDto userDto);
+        Task Update(User user);
         Task Remove(string id);
         Task<User>? FirstOrDefault(Expression<Func<User, bool>> expression);
-
+        List<User> Where(Expression<Func<User, bool>> expression);
+        List<User> GetAll();
+        List<User> Pagination(int startIndex, Expression<Func<User, bool>> whereExpression);
     }
 }

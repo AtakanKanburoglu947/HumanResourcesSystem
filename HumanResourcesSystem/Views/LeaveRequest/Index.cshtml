@@ -1,4 +1,4 @@
-﻿@model HumanResourcesSystem.Models.LeaveRequestPageModel
+﻿@model PaginationModel<HumanResourcesSystemCore.Models.LeaveRequest, LeaveRequestPageModel>
 
 @{
     Layout = "~/Views/Shared/_UserLayout.cshtml";
@@ -11,15 +11,15 @@
                 <form method="post">
                     <div class="mb-3">
                         <label for="StartDate" class="form-label">Başlangıç Tarihi</label>
-                        <input type="date" class="form-control" id="StartDate" name="StartDate" required />
+                        <input type="date" class="form-control" id="StartDate" asp-for="Data.StartDate" required />
                     </div>
                     <div class="mb-3">
                         <label for="EndDate" class="form-label">Bitiş Tarihi</label>
-                        <input type="date" class="form-control" id="EndDate" name="EndDate" required />
+                        <input type="date" class="form-control" id="EndDate" asp-for="Data.EndDate" required />
                     </div>
                     <div class="mb-3">
                         <label for="Reason" class="form-label">Sebep</label>
-                        <textarea class="form-control" id="Reason" name="Reason" rows="3" required></textarea>
+                        <textarea class="form-control" id="Reason" asp-for="Data.Reason" rows="3" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-success" asp-controller="LeaveRequest" asp-action="Add">İzin İste</button>
                 </form>
@@ -40,9 +40,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model.LeaveRequests != null && Model.LeaveRequests.Any())
+                        @if (Model.Dataset != null && Model.Dataset.Any())
                         {
-                            @foreach (var request in Model.LeaveRequests)
+                            @foreach (var request in Model.Dataset)
                             {
                                 <tr>
                                     <td>@request.StartDate.ToShortDateString()</td>
@@ -76,4 +76,6 @@
             </div>
         </div>
     </div>
+    @await Html.PartialAsync("Partial/Pagination", Model.PartialPaginationModel)
+
 </div>

@@ -1,5 +1,6 @@
 ﻿using HumanResourcesSystemCore.Models;
 using HumanResourcesSystemCore.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace HumanResourcesSystemRepository.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _appDbContext;
+        
         public UserRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
@@ -44,7 +46,21 @@ namespace HumanResourcesSystemRepository.Repositories
             return null!;
         }
 
-        public async void Remove(string id)
+        public List<User> GetAll()
+        {
+            return _appDbContext.Users.ToList();
+        }
+
+        public List<User> Pagination(int startIndex, Expression<Func<User, bool>> whereExpression)
+        {
+            if (whereExpression == null)
+            {
+                return _appDbContext.Users.Skip(startIndex).ToList();
+            }
+            return _appDbContext.Users.Where(whereExpression).Skip(startIndex).ToList();
+        }
+
+        public async Task Remove(string id)
         {
             var userInDatabase = await FindAsync(id);
             bool userExists = userInDatabase != null;
@@ -54,14 +70,26 @@ namespace HumanResourcesSystemRepository.Repositories
             }
         }
 
-        public async void Update(User user)
+        public async Task Update(User user)
         {
-            var userInDatabase = await FindAsync(user.Id);
-            bool userExists = userInDatabase != null;
-            if (userExists)
-            {
-                _appDbContext.Users.Update(user);
-            }
+            var userInDatabase = await _appDbContext.Users.FindAsync(user.Id);
+            if (userInDatabase == null)
+                throw new Exception("Kullanıcı bulunamadı.");
+
+            // Alanları güncelle
+            userInDatabase.FirstName = user.FirstName;
+            userInDatabase.LastName = user.LastName;
+            userInDatabase.BirthDate = user.BirthDate;
+            userInDatabase.HireDate = user.HireDate;
+            userInDatabase.ManagerId = user.ManagerId;
+            userInDatabase.CompanyId = user.CompanyId;
+            userInDatabase.DepartmentId = user.DepartmentId;
+
+        }
+
+        public List<User> Where(Expression<Func<User, bool>> expression)
+        {
+            return _appDbContext.Users.Where(expression).ToList();
         }
     }
 }

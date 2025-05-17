@@ -88,6 +88,36 @@ namespace HumanResourcesSystemRepository.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("HumanResourcesSystemCore.Models.DailyTask", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool?>("isFinished")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("DailyTasks");
+                });
+
             modelBuilder.Entity("HumanResourcesSystemCore.Models.DatabaseLog", b =>
                 {
                     b.Property<string>("Id")
@@ -153,41 +183,6 @@ namespace HumanResourcesSystemRepository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("EventModels");
-                });
-
-            modelBuilder.Entity("HumanResourcesSystemCore.Models.JobApplication", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ApplicationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CandiadateName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CandidateEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CandidatePhone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResumeUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReviewerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReviewerId");
-
-                    b.ToTable("JobApplications");
                 });
 
             modelBuilder.Entity("HumanResourcesSystemCore.Models.LeaveRequest", b =>
@@ -321,10 +316,6 @@ namespace HumanResourcesSystemRepository.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<decimal?>("Salary")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -416,19 +407,19 @@ namespace HumanResourcesSystemRepository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e1f5bc6f-c44e-4b5d-8a8f-8d77e600d93f",
+                            Id = "51e2fe06-2492-41cf-9822-658ad66f315f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "b94c68a0-42c2-41ae-bf4f-342dfbd33522",
+                            Id = "ef39be9d-347c-40cd-a4ee-61ae7addb07a",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "b25e9802-b2ab-4228-89bc-fa0f02ce00c9",
+                            Id = "4abcbe5c-261b-4b41-8955-c95fdee2de25",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -551,6 +542,17 @@ namespace HumanResourcesSystemRepository.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("HumanResourcesSystemCore.Models.DailyTask", b =>
+                {
+                    b.HasOne("HumanResourcesSystemCore.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HumanResourcesSystemCore.Models.Department", b =>
                 {
                     b.HasOne("HumanResourcesSystemCore.Models.Company", "Company")
@@ -571,17 +573,6 @@ namespace HumanResourcesSystemRepository.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("HumanResourcesSystemCore.Models.JobApplication", b =>
-                {
-                    b.HasOne("HumanResourcesSystemCore.Models.User", "Reviewer")
-                        .WithMany()
-                        .HasForeignKey("ReviewerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Reviewer");
                 });
 
             modelBuilder.Entity("HumanResourcesSystemCore.Models.LeaveRequest", b =>

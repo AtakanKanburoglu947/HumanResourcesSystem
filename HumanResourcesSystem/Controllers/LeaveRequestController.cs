@@ -21,38 +21,85 @@ namespace HumanResourcesSystem.Controllers
             _userService = userService;
 
         }
+        [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication", Policy = "UserOnly")]
+
         [HttpPost]
-        public async Task<IActionResult> Add(LeaveRequestPageModel leaveRequestPageModel)
+        public async Task<IActionResult> Add(PaginationModel<LeaveRequest, LeaveRequestPageModel> paginationModel)
         {
             AccountDto accountDto = _authService.GetAccountDetailsFromToken();
             var user = await _userService.FindAsync(accountDto.Id);
             var manager = await _userService.FindAsync(user.ManagerId);
-            LeaveRequestDto leaveRequestDto = new LeaveRequestDto()
+            if (manager != null)
             {
-                EndDate = (DateTime)leaveRequestPageModel.EndDate!,
-                StartDate = (DateTime)leaveRequestPageModel.StartDate!,
-                IsAccepted = null,
-                ManagerId = manager.Id,
-                Reason = leaveRequestPageModel.Reason,
-                UserId = user.Id,
-            };
-            await _leaveRequestService.AddAsync(leaveRequestDto);
+                LeaveRequestDto leaveRequestDto = new LeaveRequestDto()
+                {
+                    EndDate = (DateTime)paginationModel.Data.EndDate!,
+                    StartDate = (DateTime)paginationModel.Data.StartDate!,
+                    IsAccepted = null,
+                    ManagerId = manager.Id,
+                    Reason = paginationModel.Data.Reason,
+                    UserId = user.Id,
+                };
+                await _leaveRequestService.AddAsync(leaveRequestDto);
+            }
+            
             return RedirectToAction("Index");
         }
-        public IActionResult Index()
+        [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication", Policy = "UserOnly")]
+
+        public IActionResult Index(int id)
         {
-            AccountDto accountDto = _authService.GetAccountDetailsFromToken();
-            var leaveRequests = _leaveRequestService.Where(x => x.EndDate, x => x.UserId == accountDto.Id);
-            LeaveRequestPageModel leaveRequestPageModel = new LeaveRequestPageModel()
+            ViewData["id"] = id;
+            if (id > 0)
             {
-                LeaveRequests = leaveRequests,
+                id *= 5;
+            }
+            AccountDto accountDto = _authService.GetAccountDetailsFromToken();
+            var leaveRequests = _leaveRequestService.Pagination(id, x => x.UserId == accountDto.Id);
+            LeaveRequestPageModel leaveRequestPageModel = new LeaveRequestPageModel();
+            PaginationModel<LeaveRequest, LeaveRequestPageModel> paginationModel = new PaginationModel<LeaveRequest, LeaveRequestPageModel>()
+            {
+                Data = leaveRequestPageModel,
+                Dataset = leaveRequests,
+                PartialPaginationModel = new PartialPaginationModel() { Count = _leaveRequestService.Where(x=>x.UserId == accountDto.Id).Count }
             };
-            return View(leaveRequestPageModel);
+
+            return View(paginationModel);
         }
-        [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication",Roles = "manager")]
-        public IActionResult Requests()
+        [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication", Policy = "ManagerOnly")]
+        public IActionResult Requests(int id)
         {
-            return View();
+            ViewData["id"] = id;
+            if (id > 0)
+            {
+                id *= 5;
+            }
+            AccountDto accountDto = _authService.GetAccountDetailsFromToken();
+            var leaveRequests = _leaveRequestService.Pagination(id, x=>x.ManagerId == accountDto.Id);
+            LeaveRequestPageModel leaveRequestPageModel = new LeaveRequestPageModel();
+            PaginationModel<LeaveRequest, LeaveRequestPageModel> paginationModel = new PaginationModel<LeaveRequest, LeaveRequestPageModel>()
+            {
+                Data = leaveRequestPageModel,
+                Dataset = leaveRequests,
+                PartialPaginationModel = new PartialPaginationModel() { Count = _leaveRequestService.Where(x => x.UserId == accountDto.Id).Count }
+            };
+            return View(paginationModel);
+        }
+        [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication", Policy = "ManagerOnly")]
+        public async Task<IActionResult> Accept(string id)
+        {
+            var leaveRequest = await _leaveRequestService.FindAsync(id);
+            leaveRequest.IsAccepted = true;
+            await _leaveRequestService.UpdateAsync(leaveRequest);
+            return RedirectToAction("Requests");
+        }
+        [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication", Policy = "ManagerOnly")]
+        public async Task<IActionResult> Reject(string id)
+        {
+            var leaveRequest = await _leaveRequestService.FindAsync(id);
+            leaveRequest.IsAccepted = false;
+            await _leaveRequestService.UpdateAsync(leaveRequest);
+            return RedirectToAction("Requests");
         }
 
     }

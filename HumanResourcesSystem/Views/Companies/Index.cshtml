@@ -1,0 +1,28 @@
+﻿@model PaginationModel<HumanResourcesSystemCore.Models.Company,NoData>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+<div class="container mt-4">
+    <a class="btn btn-success mt-2" asp-action="AddCompany" asp-controller="Companies">Şirket Ekle</a>
+    <br />
+    <br />
+    <div class="row">
+        @foreach (var company in Model.Dataset!)
+        {
+            <div class="col-md-4 col-sm-6 col-12 mb-3">
+                <div class="card text-dark bg-white border shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">@company.Name</h5>
+                        <p class="card-text"><strong>Endüstri:</strong> @company.Industry</p>
+                        <p class="card-text"><strong>Açıklama:</strong> @(company.Description ?? "N/A")</p>
+                        <a class="btn btn-success" asp-area="" asp-controller="Companies" asp-action="Company"
+                           asp-route-id="@company.Id">Detaylar</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    @await Html.PartialAsync("Partial/Pagination", Model.PartialPaginationModel)
+
+</div>

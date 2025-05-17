@@ -1,18 +1,18 @@
-﻿@model HumanResourcesSystem.Models.WorkReportPageModel
+﻿@model PaginationModel<HumanResourcesSystemCore.Models.WorkReport, WorkReportPageModel>
 
 @{
     Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 
 <div class="card p-4 mb-4">
-    <form method="post" asp-controller="WorkReport" asp-action="Create">
+    <form method="post" asp-controller="WorkReport" asp-action="Add">
         <div class="form-group">
             <label for="Title">Başlık</label>
-            <input type="text" class="form-control" id="Title" name="Title" required />
+            <input type="text" class="form-control" id="Title" asp-for="Data.Title" required />
         </div>
         <div class="form-group">
             <label for="Description">Açıklama</label>
-            <textarea class="form-control" id="Description" name="Description" rows="4" required></textarea>
+            <textarea class="form-control" id="Description" asp-for="Data.Description" rows="4" required></textarea>
         </div>
         <br />
         <button type="submit" class="btn btn-success">Çalışma Raporu Ekle</button>
@@ -20,7 +20,7 @@
 </div>
 
 <div class="list-group">
-    @foreach (var report in Model.WorkReports)
+    @foreach (var report in Model.Dataset)
     {
         <div class="list-group-item" style="word-wrap: break-word; overflow-wrap: break-word; white-space: pre-line;">
             <div class="d-flex justify-content-between">
@@ -33,4 +33,6 @@
             <hr />
         </div>
     }
+    @await Html.PartialAsync("Partial/Pagination", Model.PartialPaginationModel)
+
 </div>

@@ -1,0 +1,21 @@
+﻿@model PaginationModel<HumanResourcesSystemCore.Models.WorkReport, WorkReportPageModel>
+
+@{
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+@foreach (var report in Model.Dataset)
+{
+    <div class="list-group-item" style="word-wrap: break-word; overflow-wrap: break-word; white-space: pre-line;">
+        <div class="d-flex justify-content-between">
+            <h5>@report.Title</h5>
+            <small>@report.ReportDate.ToString("yyyy-MM-dd")</small>
+        </div>
+        <p class="mt-2" style="word-wrap: break-word; overflow-wrap: break-word; white-space: pre-line; max-width: 100%;">
+            @report.Description
+        </p>
+        <hr />
+    </div>
+}
+@await Html.PartialAsync("Partial/Pagination", Model.PartialPaginationModel)
+
+</div>

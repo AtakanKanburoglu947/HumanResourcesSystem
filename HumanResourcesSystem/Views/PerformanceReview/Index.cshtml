@@ -4,42 +4,47 @@
 @{
     Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
-@model List<HumanResourcesSystemCore.Models.PerformanceReview>
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Performans Değerlendirmeleri</h2>
-
-    @if (Model != null && Model.Any())
-    {
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Değerlendirme Tarihi</th>
-                    <th scope="col">Skor</th>
-                    <th scope="col">Değerlendirmen</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var review in Model)
-                {
+@model PaginationModel<HumanResourcesSystemCore.Models.PerformanceReview,NoData>
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="card p-4 shadow-sm">
+            <h2 class="text-center mb-4">Performans Değerlendirmeleri</h2>
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td>@review.ReviewDate.ToString("yyyy-MM-dd")</td>
-                        <td>
-                            <span class="badge @(review.Score >= 80 ? "bg-success" : review.Score >= 50 ? "bg-warning" : "bg-danger")">
-                                @review.Score
-                            </span>
-                        </td>
+                        <th>Değerlendirme Tarihi</th>
+                        <th>Skor</th>
+                        <th>Değerlendirme</th>
+                        <th>Değerlendiren</th>
                     </tr>
-                    <tr>
-                        <td colspan="3">Değerlendirme: @review.Feedback</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <div class="alert alert-warning text-center" role="alert">
-            Performans değerlendirmeleri bulunamadı
+                </thead>
+                <tbody>
+                    @if (Model.Dataset != null && Model.Dataset.Any())
+                    {
+                        @foreach (var review in Model.Dataset)
+                        {
+                            <tr>
+                                <td>@review.ReviewDate.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    <span class="badge @(review.Score >= 80 ? "bg-success" : review.Score >= 50 ? "bg-warning" : "bg-danger")">
+                                        @review.Score
+                                    </span>
+                                </td>
+                                <td>@review.Feedback</td>
+                                <td>@review.Reviewer.UserName</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center">Performans değerlendirmeleri bulunamadı.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-    }
+    </div>
+    @await Html.PartialAsync("Partial/Pagination", Model.PartialPaginationModel)
+
 </div>

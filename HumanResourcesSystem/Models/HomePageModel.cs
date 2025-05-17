@@ -10,6 +10,7 @@ namespace HumanResourcesSystem.Models
         public string? CompanyName { get; set; }
         public string? ManagerName { get; set; }
         public string? DepartmentName { get; set; }  
+        public bool IsUserManager { get; set; }
 
     }
 }

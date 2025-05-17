@@ -15,8 +15,12 @@ namespace HumanResourcesSystemCore.Services
         Task UpdateAsync(T entity);
         Task RemoveAsync(string id);
         List<T> Where(Expression<Func<T, DateTime>> orderBy, Expression<Func<T, bool>> expression);
+        List<T> Where(Expression<Func<T, bool>> expression);
         List<T> GetAll();
         Task<T>? FirstOrDefault(Expression<Func<T, bool>> expression);
+        List<T> Pagination(int startIndex, Expression<Func<T, bool>> whereExpression);
+
+
 
     }
 }

@@ -49,6 +49,15 @@ namespace HumanResourcesSystemRepository.Repositories
             return _dbSet.ToList();
         }
 
+        public List<T> Pagination(int startIndex, Expression<Func<T, bool>> whereExpression)
+        {
+            if (whereExpression == null)
+            {
+                return _dbSet.Skip(startIndex).Take(5).ToList();
+            }
+            return _dbSet.Where(whereExpression).Skip(startIndex).Take(5).ToList();
+        }
+
         public async Task Remove(string id)
         {
             var entity = await _dbSet.FindAsync(id);
@@ -66,6 +75,16 @@ namespace HumanResourcesSystemRepository.Repositories
         public List<T> Where(Expression<Func<T, DateTime>> orderBy, Expression<Func<T, bool>> expression)
         {
             List<T> result = _dbSet.OrderByDescending(orderBy).Where(expression).ToList();
+            if (result != null)
+            {
+                return result;
+            }
+            return null;
+        }
+
+        public List<T> Where(Expression<Func<T, bool>> expression)
+        {
+            List<T> result = _dbSet.Where(expression).ToList();
             if (result != null)
             {
                 return result;

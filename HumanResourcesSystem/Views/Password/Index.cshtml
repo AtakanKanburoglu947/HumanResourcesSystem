@@ -1,0 +1,22 @@
+﻿@{
+    if ((bool)ViewData["HasRole"] == true)
+    {
+        Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_UserLayout.cshtml";
+        
+    }
+}
+<div class="task-container">
+    <div class="card p-4 shadow-sm" style="width: 100%; background: #fff; border-radius: 10px;">
+        <form method="post" asp-controller="Password" asp-action="ChangePassword">
+            <div class="task-input">
+                <input type="text" data-id="newPassword" name="newPassword" placeholder="Yeni Şifre" class="form-control" required />
+                <button type="submit" class="btn btn-success mt-2">Değiştir</button>
+            </div>
+        </form>
+    </div>
+</div>

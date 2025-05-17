@@ -45,6 +45,11 @@ namespace HumanResourcesSystemService.Services
             return _repository.GetAll();
         }
 
+        public List<T> Pagination(int startIndex, Expression<Func<T, bool>> whereExpression)
+        {
+            return _repository.Pagination(startIndex, whereExpression);
+        }
+
         public async Task RemoveAsync(string id)
         {
             await _repository.Remove(id);
@@ -60,6 +65,11 @@ namespace HumanResourcesSystemService.Services
         public List<T> Where(Expression<Func<T, DateTime>> orderBy, Expression<Func<T, bool>> expression)
         {
             return _repository.Where(orderBy, expression);
+        }
+
+        public List<T> Where(Expression<Func<T, bool>> expression)
+        {
+            return _repository.Where(expression);
         }
     }
 }

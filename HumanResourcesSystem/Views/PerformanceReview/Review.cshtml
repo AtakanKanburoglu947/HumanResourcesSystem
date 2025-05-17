@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+@model PaginationModel<HumanResourcesSystemCore.Models.PerformanceReview,PerformanceReviewPageModel>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Performans Değerlendirmeleri</h2>
+
+    <!-- Kullanıcı Değerlendirme Formu -->
+    <div class="card p-3 mb-4">
+        <h4>Kullanıcı Değerlendir</h4>
+        <form asp-action="Add" method="post">
+            <div class="mb-3">
+                <label for="selectedUser" class="form-label">Kullanıcı Seç</label>
+                <select id="selectedUser" name="UserId" class="form-select" required onchange="updateSelectedUser()">
+                    <option value="">Seçiniz</option>
+                    @foreach (var name in Model.Data.Names)
+                    {
+                        <option value="@name">@name</option>
+                    }
+                </select>
+            </div>
+            <input type="hidden" id="selectedUserName" name="SelectedUserName" value="@Model.Data.SelectedUserName" />
+
+            <div class="mb-3">
+                <label for="score" class="form-label">Puan</label>
+                <input type="number" name="Score" id="score" class="form-control" min="0" max="100" required />
+            </div>
+            <div class="mb-3">
+                <label for="feedback" class="form-label">Değerlendirme</label>
+                <textarea name="Feedback" id="feedback" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </form>
+    </div>
+
+    @if (Model != null && Model.Dataset.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Değerlendirme Tarihi</th>
+                    <th scope="col">Skor</th>
+                    <th scope="col">Değerlendirmen</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var review in Model.Dataset)
+                {
+                    <tr>
+                        <td>@review.ReviewDate.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            <span class="badge @(review.Score >= 80 ? "bg-success" : review.Score >= 50 ? "bg-warning" : "bg-danger")">
+                                @review.Score
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Değerlendirme: @review.Feedback</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            Performans değerlendirmeleri bulunamadı
+        </div>
+    }
+</div>
+
+<script>
+    function updateSelectedUser() {
+        var selectedUser = document.getElementById("selectedUser").value;
+        document.getElementById("selectedUserName").value = selectedUser;
+    }
+</script>

@@ -1,11 +1,19 @@
 ﻿@model HomePageModel
 @{
-    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    if (Model.IsUserManager)
+    {
+        Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_UserLayout.cshtml"; 
+        
+    }
 }
 
 <div class="container mt-4">
     <div class="row">
-        <!-- Kullanıcı Bilgileri (Sol) -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header text-dark">
@@ -21,7 +29,6 @@
             </div>
         </div>
 
-        <!-- Etkinlikler (Sağ) -->
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header  text-dark">
@@ -48,7 +55,6 @@
         </div>
     </div>
 
-    <!-- Duyurular (Alt) -->
     <div class="row mt-4">
         <div class="col-md-12">
             <div class="card">

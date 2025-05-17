@@ -15,13 +15,13 @@ namespace HumanResourcesSystemService
         {
             CreateMap<CompanyDto,Company>().ReverseMap();
             CreateMap<DepartmentDto,Department>().ReverseMap();
-            CreateMap<JobApplicationDto,JobApplication>().ReverseMap();
             CreateMap<LeaveRequestDto,LeaveRequest>().ReverseMap();
             CreateMap<PerformanceReviewDto,PerformanceReview>().ReverseMap();
             CreateMap<UserDto,User>().ReverseMap();
             CreateMap<WorkReportDto,WorkReport>().ReverseMap();
             CreateMap<EventDto, EventModel>().ReverseMap();
             CreateMap<AnnouncementDto,Announcement>().ReverseMap();
+            CreateMap<DailyTaskDto,DailyTask>().ReverseMap();
         }
     }
 }

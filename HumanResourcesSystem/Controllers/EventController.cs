@@ -16,19 +16,30 @@ namespace HumanResourcesSystem.Controllers
     {
         private readonly IService<EventModel, EventDto> _eventService;
         private readonly IAuthService _authService;
+        private readonly IUserService _userService;
 
-        public EventController(IService<EventModel, EventDto> eventService, IAuthService authService)
+        public EventController(IService<EventModel, EventDto> eventService, IAuthService authService, IUserService userService)
         {
             _eventService = eventService;
             _authService = authService;
+            _userService = userService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int id)
         {
+            ViewData["id"] = id;
+            if (id > 0)
+            {
+                id *= 5;
+            }
+
+            CelendarEvent celendarEvent = new CelendarEvent();
             var accountDto = _authService.GetAccountDetailsFromToken();
             ViewData["UserId"] = accountDto.Id;
-
-            var events = _eventService.Where(x => x.StartDate, x => x.UserId == accountDto.Id);
+            var user = await _userService.FindAsync(accountDto.Id);
+            ViewData["HasRole"] = await _authService.HasRole("manager", user); 
+            var events = _eventService.Pagination(id, x => x.UserId == accountDto.Id);
+            int eventCount = _eventService.Where(x => x.UserId == accountDto.Id).Count;
             var celendarEvents = events.Select(x => new CelendarEvent()
             {
                 End = x.EndDate,
@@ -37,16 +48,18 @@ namespace HumanResourcesSystem.Controllers
                 Title = x.Title,
                 UserId = accountDto.Id,
             }).ToList();
-           
-            return View(celendarEvents);
+            PaginationModel<CelendarEvent, NoData> paginationModel = new PaginationModel<CelendarEvent, NoData>()
+            {
+                Dataset = celendarEvents,
+                PartialPaginationModel = new PartialPaginationModel() { Count = eventCount }
+            };
+
+            return View(paginationModel);
         }
         [HttpPost]
         public async Task<IActionResult> Add(CelendarEvent celendarEvent)
         {
-            // Kullanıcı bilgilerini JWT token'dan alıyoruz
-            var accountDto = _authService.GetAccountDetailsFromToken();
-
-            // Başlangıç ve bitiş tarihlerini kontrol et
+                var accountDto = _authService.GetAccountDetailsFromToken();
             if (celendarEvent.Start.Date != celendarEvent.End.Date)
             {
                 TempData["ErrorMessage"] = "Başlangıç ve bitiş tarihi aynı gün olmalıdır.";
@@ -68,8 +81,6 @@ namespace HumanResourcesSystem.Controllers
 
                 return RedirectToAction("Index");
             }
-
-            // Event'i kaydet
             celendarEvent.UserId = accountDto.Id;
             EventDto eventDto = new EventDto()
             {
@@ -106,7 +117,6 @@ namespace HumanResourcesSystem.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Tarih kontrolleri
             if (celendarEvent.Start.Date != celendarEvent.End.Date)
             {
                 TempData["ErrorMessage"] = "Başlangıç ve bitiş tarihi aynı gün olmalıdır.";

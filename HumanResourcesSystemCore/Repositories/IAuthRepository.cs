@@ -1,6 +1,7 @@
 ﻿using HumanResourcesSystemCore.AuthDtos;
 using HumanResourcesSystemCore.AuthModels;
 using HumanResourcesSystemCore.Dtos;
+using HumanResourcesSystemCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,8 @@ namespace HumanResourcesSystemCore.Repositories
         bool ValidateToken(string token);
         void RemoveExpiredRefreshTokens(string userId);
         AccountDto GetAccountDetailsFromToken();
+        Task<IQueryable<User>> UsersWithRole(string roleName);
+        Task<bool> HasRole(string roleName, User user);
+
     }
 }

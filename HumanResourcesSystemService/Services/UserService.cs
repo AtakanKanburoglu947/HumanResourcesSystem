@@ -46,11 +46,25 @@ namespace HumanResourcesSystemService.Services
             _userRepository.Remove(id);
             await _unitOfWork.CommitAsync();
         }
-        public async Task Update(UserDto userDto)
+        public async Task Update(User userDto)
         {
 
-            _userRepository.Update(_mapper.Map<User>(userDto));
+            await _userRepository.Update(userDto);
             await _unitOfWork.CommitAsync();
+        }
+
+        public List<User> Where(Expression<Func<User, bool>> expression)
+        {
+            return _userRepository.Where(expression);
+        }
+        public List<User> GetAll()
+        {
+            return _userRepository.GetAll();
+        }
+
+        public List<User> Pagination(int startIndex, Expression<Func<User, bool>> whereExpression)
+        {
+            return _userRepository.Pagination(startIndex, whereExpression);
         }
     }
 }

@@ -6,6 +6,7 @@ using HumanResourcesSystemCore.Repositories;
 using HumanResourcesSystemRepository.Migrations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +23,13 @@ namespace HumanResourcesSystemRepository.Repositories
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly ICookieRepository _cookieRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly AppDbContext _appDbContext;
         public AuthRepository(
            UserManager<User> userManager,
            ITokenRepository tokenRepository,
            IRefreshTokenRepository refreshTokenRepository,
            ICookieRepository cookieRepository,
+           AppDbContext appDbContext,
            IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
@@ -34,6 +37,7 @@ namespace HumanResourcesSystemRepository.Repositories
             _refreshTokenRepository = refreshTokenRepository;
             _cookieRepository = cookieRepository;
             _httpContextAccessor = httpContextAccessor;
+            _appDbContext = appDbContext;
         }
 
         public AccountDto GetAccountDetailsFromToken()
@@ -41,9 +45,9 @@ namespace HumanResourcesSystemRepository.Repositories
             return _tokenRepository.Decode();
         }
 
-        public async Task ChangePassword(string newPassword, string email)
+        public async Task ChangePassword(string newPassword, string userId)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 throw new Exception("User not found.");
@@ -143,7 +147,7 @@ namespace HumanResourcesSystemRepository.Repositories
             }
             else
             {
-                throw new Exception("User registration failed.");
+                throw new Exception("Kullanıcı kayıdı başarısız.");
             }
         }
 
@@ -156,6 +160,28 @@ namespace HumanResourcesSystemRepository.Repositories
         {
             
             return _tokenRepository.Validate(token);
+        }
+
+        public async Task<IQueryable<User>> UsersWithRole(string roleName)
+        {
+            var role = await _appDbContext.Roles.FirstOrDefaultAsync(x => x.NormalizedName == roleName.ToUpper());
+           
+
+            var roleUserIds = await _appDbContext.UserRoles
+                .Where(x => x.RoleId == role.Id)
+                .Select(x => x.UserId)
+                .ToListAsync();
+
+            var usersWithRoles = _appDbContext.Users
+                .Where(u => roleUserIds.Contains(u.Id));
+            return usersWithRoles;
+        }
+
+        public async Task<bool> HasRole(string roleName, User user)
+        {
+            var role = await _appDbContext.Roles.FirstOrDefaultAsync(x => x.NormalizedName == roleName.ToUpper());
+            var userWithRole = await _appDbContext.UserRoles.FirstOrDefaultAsync(x=>x.UserId == user.Id && x.RoleId == role.Id);
+            return userWithRole != null;
         }
     }
 }
