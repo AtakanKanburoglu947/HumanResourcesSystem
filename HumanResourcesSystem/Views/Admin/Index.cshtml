@@ -13,9 +13,7 @@
                        
                         <h5 class="card-title fw-bold">@user.FirstName @user.LastName</h5>
                         <p class="card-text"><strong>Email:</strong> @user.Email</p>
-                        <p class="card-text"><strong>Department:</strong> @(user.Department?.Name ?? "N/A")</p>
-                        <p class="card-text"><strong>Company:</strong> @(user.Company?.Name ?? "N/A")</p>
-                        <p class="card-text"><strong>Hire Date:</strong> @(user.HireDate?.ToShortDateString() ?? "N/A")</p>
+                   
                         <a class="btn btn-success" asp-area="" asp-controller="Admin" asp-action="User"
                            asp-route-id="@user.Id">Detaylar</a>
                     </div>

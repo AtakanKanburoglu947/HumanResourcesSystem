@@ -50,13 +50,13 @@ namespace HumanResourcesSystemRepository.Repositories
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                throw new Exception("User not found.");
+                throw new Exception("Kullanıcı bulunamadı.");
             }
             var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
             var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
             if (!result.Succeeded)
             {
-                throw new Exception("Password change failed");
+                throw new Exception("Şifre değiştirme başarısız");
             }
         }
 
@@ -65,7 +65,7 @@ namespace HumanResourcesSystemRepository.Repositories
             var user = await _userManager.FindByEmailAsync(login.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, login.Password))
             {
-                throw new Exception("Invalid credentials.");
+                throw new Exception("Yanlış bilgiler.");
             }
 
             var claims = new List<Claim>
@@ -105,12 +105,12 @@ namespace HumanResourcesSystemRepository.Repositories
             RefreshToken existingToken = await _refreshTokenRepository.GetByTokenAsync(refreshToken);
             if (existingToken == null || !_refreshTokenRepository.Validate(existingToken))
             {
-                throw new UnauthorizedAccessException("Invalid or expired refresh token.");
+                throw new UnauthorizedAccessException("Yanlış veya süresi dolmuş token.");
             }
             var user = await _userManager.FindByIdAsync(existingToken.UserId);
             if (user == null)
             {
-                throw new UnauthorizedAccessException("User not found.");
+                throw new UnauthorizedAccessException("Kullanıcı bulunamadı.");
             }
 
             var claims = new List<Claim>

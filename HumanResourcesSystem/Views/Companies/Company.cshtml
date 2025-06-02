@@ -38,8 +38,8 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center" id="department-@item.Id">
                                 <span class="department-name">@item.Name</span>
                                 <div class="button-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary me-1" data-id="@item.Id" onclick="editDepartment(this)">Düzenle</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger" data-id="@item.Id" onclick="deleteDepartment(this)">Sil</button>
+                                    <button type="button" class="btn btn-sm btn-success" data-id="@item.Id" onclick="editDepartment(this)">Düzenle</button>
+                                    <button type="button" class="btn btn-sm btn-danger" data-id="@item.Id" onclick="deleteDepartment(this)">Sil</button>
                                 </div>
                             </li>
                         }
@@ -47,7 +47,7 @@
 
                     <div class="input-group">
                         <input type="text" asp-for="NewDepartment" class="form-control" placeholder="Yeni departman adı..." />
-                        <button asp-action="AddNewDepartment" asp-controller="Companies" type="submit" class="btn btn-primary">
+                        <button asp-action="AddNewDepartment" asp-controller="Companies" type="submit" class="btn btn-success">
                             Ekle
                         </button>
                     </div>
@@ -76,8 +76,8 @@
         nameSpan.innerHTML = `<input type="text" class="form-control form-control-sm" id="edit-input-${departmentId}" value="${currentName}" />`;
 
         buttonGroup.innerHTML = `
-            <button type="button" class="btn btn-sm btn-success me-1" onclick="confirmEdit(this)" data-id="${departmentId}">&#10003;</button>
-            <button type="button" class="btn btn-sm btn-secondary" onclick="cancelEdit(this)" data-id="${departmentId}">&#10005;</button>
+            <button type="button" class="btn btn-sm btn-success" onclick="confirmEdit(this)" data-id="${departmentId}">&#10003;</button>
+            <button type="button" class="btn btn-sm btn-danger" onclick="cancelEdit(this)" data-id="${departmentId}">&#10005;</button>
         `;
     }
 
@@ -93,8 +93,8 @@
         nameSpan.innerText = originalName;
 
         buttonGroup.innerHTML = `
-            <button type="button" class="btn btn-sm btn-outline-secondary me-1" data-id="${departmentId}" onclick="editDepartment(this)">Düzenle</button>
-            <button type="button" class="btn btn-sm btn-outline-danger" data-id="${departmentId}" onclick="deleteDepartment(this)">Sil</button>
+            <button type="button" class="btn btn-sm btn-success" data-id="${departmentId}" onclick="editDepartment(this)">Düzenle</button>
+            <button type="button" class="btn btn-sm btn-danger" data-id="${departmentId}" onclick="deleteDepartment(this)">Sil</button>
         `;
     }
 
@@ -123,8 +123,8 @@
                     nameSpan.innerText = newName;
 
                     buttonGroup.innerHTML = `
-                    <button type="button" class="btn btn-sm btn-outline-secondary me-1" data-id="${departmentId}" onclick="editDepartment(this)">Düzenle</button>
-                    <button type="button" class="btn btn-sm btn-outline-danger" data-id="${departmentId}" onclick="deleteDepartment(this)">Sil</button>
+                    <button type="button" class="btn btn-sm btn-success" data-id="${departmentId}" onclick="editDepartment(this)">Düzenle</button>
+                    <button type="button" class="btn btn-sm btn-danger" data-id="${departmentId}" onclick="deleteDepartment(this)">Sil</button>
                 `;
                 } else {
                     alert('Güncelleme başarısız.');

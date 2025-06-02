@@ -20,7 +20,6 @@ namespace HumanResourcesSystemService
             CreateMap<UserDto,User>().ReverseMap();
             CreateMap<WorkReportDto,WorkReport>().ReverseMap();
             CreateMap<EventDto, EventModel>().ReverseMap();
-            CreateMap<AnnouncementDto,Announcement>().ReverseMap();
             CreateMap<DailyTaskDto,DailyTask>().ReverseMap();
         }
     }

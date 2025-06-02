@@ -42,6 +42,10 @@ namespace HumanResourcesSystem.Controllers
                 };
                 await _leaveRequestService.AddAsync(leaveRequestDto);
             }
+            else
+            {
+                TempData["error"] = "Bu kullanıcıya yönetici atanmamış. Lütfen ilgili birimlerle iletişime geçin";
+            }
             
             return RedirectToAction("Index");
         }
@@ -67,7 +71,7 @@ namespace HumanResourcesSystem.Controllers
             return View(paginationModel);
         }
         [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication", Policy = "ManagerOnly")]
-        public IActionResult Requests(int id)
+        public async Task<IActionResult> Requests(int id)
         {
             ViewData["id"] = id;
             if (id > 0)
@@ -76,10 +80,13 @@ namespace HumanResourcesSystem.Controllers
             }
             AccountDto accountDto = _authService.GetAccountDetailsFromToken();
             var leaveRequests = _leaveRequestService.Pagination(id, x=>x.ManagerId == accountDto.Id);
-            LeaveRequestPageModel leaveRequestPageModel = new LeaveRequestPageModel();
-            PaginationModel<LeaveRequest, LeaveRequestPageModel> paginationModel = new PaginationModel<LeaveRequest, LeaveRequestPageModel>()
+            foreach (var leaveRequest in leaveRequests)
             {
-                Data = leaveRequestPageModel,
+                leaveRequest.User = await _userService.FindAsync(leaveRequest.UserId);
+            }
+            LeaveRequestPageModel leaveRequestPageModel = new LeaveRequestPageModel();
+            PaginationModel<LeaveRequest, NoData> paginationModel = new PaginationModel<LeaveRequest, NoData>()
+            {
                 Dataset = leaveRequests,
                 PartialPaginationModel = new PartialPaginationModel() { Count = _leaveRequestService.Where(x => x.UserId == accountDto.Id).Count }
             };

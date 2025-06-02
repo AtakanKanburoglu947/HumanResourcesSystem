@@ -37,6 +37,10 @@ namespace HumanResourcesSystem.Controllers
             var accountDto = _authService.GetAccountDetailsFromToken();
             ViewData["UserId"] = accountDto.Id;
             var user = await _userService.FindAsync(accountDto.Id);
+            if (await _authService.HasRole("ADMIN", user))
+            {
+                return Redirect("/Admin");
+            }
             ViewData["HasRole"] = await _authService.HasRole("manager", user); 
             var events = _eventService.Pagination(id, x => x.UserId == accountDto.Id);
             int eventCount = _eventService.Where(x => x.UserId == accountDto.Id).Count;

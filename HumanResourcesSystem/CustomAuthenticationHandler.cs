@@ -27,6 +27,11 @@ namespace HumanResourcesSystemService
             _timeProvider = timeProvider;
             _configuration = configuration;
         }
+        protected override Task HandleChallengeAsync(AuthenticationProperties properties)
+        {
+            Response.Redirect("/Login");
+            return Task.CompletedTask;
+        }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {

@@ -5,10 +5,14 @@
 
         Layout = "~/Views/Shared/_ManagerLayout.cshtml";
     }
+    else if (Model.IsAdmin)
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    }
     else
     {
         Layout = "~/Views/Shared/_UserLayout.cshtml";
-
     }
 }
 <div class="card" style="width: 100%; margin-bottom: 20px;">

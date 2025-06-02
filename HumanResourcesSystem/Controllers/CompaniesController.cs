@@ -67,7 +67,7 @@ namespace HumanResourcesSystem.Controllers
             };
             await _departmentService.AddAsync(newDepartment);
 
-            return View(companyPageModel);
+            return RedirectToAction("Company","Companies",companyPageModel);
         }
         public async Task<IActionResult> Change(CompanyPageModel companyPageModel)
         {
@@ -82,7 +82,7 @@ namespace HumanResourcesSystem.Controllers
             };
             await _companyService.UpdateAsync(company);
 
-            return View(company);
+            return RedirectToAction("Company", "Companies", companyPageModel);
 
         }
         [HttpPost]

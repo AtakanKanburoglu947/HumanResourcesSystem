@@ -1,9 +1,17 @@
 ﻿@model PaginationModel<HumanResourcesSystemCore.Models.WorkReport, WorkReportPageModel>
-
+@using System.Text.Encodings.Web
+@using System.Text.Json
 @{
     Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
-
+@if (!string.IsNullOrEmpty((string)TempData["error"]))
+{
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            alert(@Html.Raw(JsonSerializer.Serialize(TempData["error"])));
+        });
+    </script>
+}
 <div class="card p-4 mb-4">
     <form method="post" asp-controller="WorkReport" asp-action="Add">
         <div class="form-group">

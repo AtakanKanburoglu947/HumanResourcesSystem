@@ -110,7 +110,7 @@ namespace HumanResourcesSystem.Controllers
             };
 
             await _userService.Update(user);
-            return Ok();
+            return RedirectToAction($"User","Admin",userPageModel);
         }
      
 

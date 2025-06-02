@@ -29,6 +29,10 @@ namespace HumanResourcesSystem.Controllers
             }
             AccountDto accountDto = _authService.GetAccountDetailsFromToken();
             var user = await _userService.FindAsync(accountDto.Id);
+            if (await _authService.HasRole("ADMIN",user))
+            {
+                return Redirect("/Admin");
+            }
             ViewData["HasRole"] = await _authService.HasRole("manager", user);
             var dailyTasks = _dailyTaskService.Pagination(id, x => x.UserId == accountDto.Id && 
             x.Date.Value.Date == DateTime.UtcNow.Date);

@@ -9,5 +9,6 @@ namespace HumanResourcesSystem.Models
         public string Email { get; set; }
         public Department Department { get; set; }
         public bool IsManager { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

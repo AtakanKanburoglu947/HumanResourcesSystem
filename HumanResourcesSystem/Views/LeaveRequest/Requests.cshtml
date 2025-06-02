@@ -9,6 +9,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>İzini İsteyen</th>
                         <th>Başlama Tarihi</th>
                         <th>Bitiş Tarihi</th>
                         <th>Sebep</th>
@@ -21,6 +22,7 @@
                         @foreach (var request in Model.Dataset)
                         {
                             <tr>
+                                <td>@request.User.FirstName @request.User.LastName</td>
                                 <td>@request.StartDate.ToShortDateString()</td>
                                 <td>@request.EndDate.ToShortDateString()</td>
                                 <td>@request.Reason</td>

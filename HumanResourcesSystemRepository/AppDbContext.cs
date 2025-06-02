@@ -20,9 +20,7 @@ namespace HumanResourcesSystemRepository
         public DbSet<PerformanceReview> PerformanceReviews { get; set;}
         public DbSet<WorkReport> WorkReports { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
-        public DbSet<DatabaseLog> DatabaseLogs { get; set; }
         public DbSet<EventModel> EventModels { get; set; }
-        public DbSet<Announcement> Announcements { get; set; }
         public DbSet<DailyTask> DailyTasks { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder builder)

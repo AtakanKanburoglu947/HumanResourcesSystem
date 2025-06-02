@@ -29,7 +29,8 @@ namespace HumanResourcesSystem.Controllers
                 Email = accountDto.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                IsManager = await _authService.HasRole("manager", user)
+                IsManager = await _authService.HasRole("manager", user),
+                IsAdmin = await _authService.HasRole("ADMIN", user)
             };
             if (department != null)
             {

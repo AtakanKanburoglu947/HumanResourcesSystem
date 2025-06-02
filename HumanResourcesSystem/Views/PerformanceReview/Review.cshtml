@@ -6,7 +6,6 @@
 <div class="container mt-4">
     <h2 class="text-center mb-4">Performans Değerlendirmeleri</h2>
 
-    <!-- Kullanıcı Değerlendirme Formu -->
     <div class="card p-3 mb-4">
         <h4>Kullanıcı Değerlendir</h4>
         <form asp-action="Add" method="post">
@@ -30,7 +29,7 @@
                 <label for="feedback" class="form-label">Değerlendirme</label>
                 <textarea name="Feedback" id="feedback" class="form-control" rows="3" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <button type="submit" class="btn btn-success">Kaydet</button>
         </form>
     </div>
 
@@ -41,7 +40,7 @@
                 <tr>
                     <th scope="col">Değerlendirme Tarihi</th>
                     <th scope="col">Skor</th>
-                    <th scope="col">Değerlendirmen</th>
+                    <th scope="col">Değerlendirilen</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,10 +53,14 @@
                                 @review.Score
                             </span>
                         </td>
+                        <td>
+                            @review.User.FirstName @review.User.LastName
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="3">Değerlendirme: @review.Feedback</td>
                     </tr>
+                   
                 }
             </tbody>
         </table>

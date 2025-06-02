@@ -47,7 +47,7 @@ namespace HumanResourcesSystem.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication", Policy = "ManagerOnly")]
-        public IActionResult Review(int id)
+        public async Task<IActionResult> Review(int id)
         {
             ViewData["id"] = id;
             if (id > 0)
@@ -56,6 +56,11 @@ namespace HumanResourcesSystem.Controllers
             }
             AccountDto accountDto = _authService.GetAccountDetailsFromToken();
             var performanceReviews = _performanceReviewService.Pagination(id, x => x.ReviewerId == accountDto.Id);
+            foreach (var performanceReview in performanceReviews)
+            {
+                performanceReview.Reviewer = await _userService.FindAsync(performanceReview.ReviewerId);
+                performanceReview.User = await _userService.FindAsync(performanceReview.UserId);
+            }
             var users = _userService.Where(x => x.ManagerId == accountDto.Id);
             var names = new List<string>();
             foreach (var user in users)
@@ -69,7 +74,8 @@ namespace HumanResourcesSystem.Controllers
             PaginationModel<PerformanceReview, PerformanceReviewPageModel> paginationModel = new PaginationModel<PerformanceReview, PerformanceReviewPageModel>()
             {
                 PartialPaginationModel = new PartialPaginationModel() { Count = _performanceReviewService.Where(x => x.UserId == accountDto.Id).Count },
-                Dataset = performanceReviews
+                Dataset = performanceReviews,
+                Data = performanceReviewPageModel   
             };
 
             return View(paginationModel);

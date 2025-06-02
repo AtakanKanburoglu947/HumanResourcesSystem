@@ -12,18 +12,16 @@ namespace HumanResourcesSystem.Controllers
     public class HomeController : Controller
     {
         private readonly IAuthService _authService;
-        private readonly IService<Announcement, AnnouncementDto> _announcementService;
         private readonly IService<Company, CompanyDto> _companyService;
         private readonly IService<Department, DepartmentDto> _departmentService;
         private readonly IService<EventModel, EventDto> _eventService;
         private readonly IUserService _userService;
         public HomeController(IAuthService authService, IService<EventModel, EventDto> eventService, 
-            IService<Announcement, AnnouncementDto> announcementService, IUserService userService, IService<Department, DepartmentDto> departmentService,
+             IUserService userService, IService<Department, DepartmentDto> departmentService,
             IService<Company,CompanyDto> companyService)
         {
             _authService = authService;
             _eventService = eventService;
-            _announcementService = announcementService;
             _userService = userService;
             _departmentService = departmentService;
             _companyService = companyService;
@@ -35,27 +33,20 @@ namespace HumanResourcesSystem.Controllers
                 .Where(x => x.StartDate, x => x.UserId == accountDto.Id)
                 .Where(x => x.EndDate.Date == DateTime.Now.Date)
                 .ToList();
-            List<Announcement>? announcements = _announcementService.GetAll();
             var user = await _userService.FindAsync(accountDto.Id)!;
+            bool isUserAdmin = await _authService.HasRole("ADMIN", user);
+            if (isUserAdmin)
+            {
+                return Redirect("/Admin");
+            }
             var manager = await _userService.FirstOrDefault(x => x.ManagerId == user.ManagerId);
             var company = await _companyService.FindAsync(user.CompanyId);
             var department = await _departmentService.FindAsync(user.DepartmentId)!;
             bool isUserManager = await _authService.HasRole("manager", user);
-            
-            HomePageModel homePageModel = new HomePageModel() { Announcements = announcements, Events = events, User = user
+            HomePageModel homePageModel = new HomePageModel() {Events = events, User = user
             , DepartmentName = department?.Name, CompanyName = company?.Name, ManagerName = manager?.UserName, IsUserManager = isUserManager};
             return View(homePageModel);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

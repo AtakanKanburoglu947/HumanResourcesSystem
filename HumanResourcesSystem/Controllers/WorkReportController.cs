@@ -44,18 +44,28 @@ namespace HumanResourcesSystem.Controllers
         {
             AccountDto accountDto = _authService.GetAccountDetailsFromToken();
             User user = await _userService.FindAsync(accountDto.Id);
-            WorkReportDto workReportDto = new WorkReportDto() {
-                Description = paginationModel.Data.Description,
-                ReportDate = DateTime.Now,
-                Title = paginationModel.Data.Title,
-                UserId = accountDto.Id,
-                ReviewerId = user.ManagerId
-            };
-            await _workReportService.AddAsync(workReportDto);
+            if (string.IsNullOrEmpty(user.ManagerId))
+            {
+                TempData["error"] = "Bu kullanıcıya yönetici atanmamış. Lütfen ilgili birimlerle iletişime geçin";
+
+            
+            }
+            else
+            {
+                WorkReportDto workReportDto = new WorkReportDto()
+                {
+                    Description = paginationModel.Data.Description,
+                    ReportDate = DateTime.Now,
+                    Title = paginationModel.Data.Title,
+                    UserId = accountDto.Id,
+                    ReviewerId = user.ManagerId
+                };
+                await _workReportService.AddAsync(workReportDto);
+            }
             return RedirectToAction("Index");
         }
         [Authorize(AuthenticationSchemes = "CustomSchemeAuthentication", Policy = "ManagerOnly")]
-        public IActionResult Reports(int id)
+        public async Task<IActionResult> Reports(int id)
         {
             ViewData["id"] = id;
             if (id > 0)
@@ -64,6 +74,10 @@ namespace HumanResourcesSystem.Controllers
             }
             AccountDto accountDto = _authService.GetAccountDetailsFromToken();
             var workReports = _workReportService.Pagination(id, x => x.ReviewerId == accountDto.Id);
+            foreach (var workReport in workReports)
+            {
+                workReport.User = await _userService.FindAsync(workReport.UserId);
+            }
             WorkReportPageModel workReportPageModel = new WorkReportPageModel();
             PaginationModel<WorkReport, WorkReportPageModel> paginationModel = new PaginationModel<WorkReport, WorkReportPageModel>()
             {

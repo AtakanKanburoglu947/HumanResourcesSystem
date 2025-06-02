@@ -32,12 +32,10 @@ namespace HumanResourcesSystem
             services.AddScoped<ICookieRepository, CookieRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ILoggerRepository, LoggerRepository>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IService<,>), typeof(Service<,>));
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ILoggerService, LoggerService>();
             services.AddAuthentication("CustomSchemeAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, CustomAuthenticationHandler>("CustomSchemeAuthentication", options => { });
             services.AddAuthorization(options =>
@@ -54,8 +52,8 @@ namespace HumanResourcesSystem
             services.AddHttpContextAccessor();
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = "/login";
-                options.AccessDeniedPath = "/Auth/AccessDenied";
+                options.LoginPath = "/Login";
+                options.AccessDeniedPath = "/Login";
             });
             return services;
         }

@@ -24,7 +24,15 @@
                     <p><strong>Email:</strong> @Model.User.Email</p>
                     <p><strong>Şirket: </strong> @Model.CompanyName</p>
                     <p><strong>Departman: </strong> @Model.DepartmentName</p>
-                    <p><strong>Yönetici: </strong> @Model.ManagerName</p>
+                    @if (Model.IsUserManager)
+                    {
+                        <p><strong>Yönetici: </strong> Yöneticisi yok</p>
+
+                    }
+                    else
+                    {
+                        <p><strong>Yönetici: </strong> @Model.ManagerName</p>
+                    }
                 </div>
             </div>
         </div>
@@ -55,30 +63,5 @@
         </div>
     </div>
 
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header text-dark">
-                    Duyurular
-                </div>
-                <div class="card-body">
-                    @if (Model.Announcements.Any())
-                    {
-                        <ul class="list-group">
-                            @foreach (var announcement in Model.Announcements)
-                            {
-                                <li class="list-group-item">
-                                    <strong>@announcement.Name</strong> - @announcement.Description
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p>Şu an herhangi bir duyuru bulunmamaktadır.</p>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
+ 
 </div>
